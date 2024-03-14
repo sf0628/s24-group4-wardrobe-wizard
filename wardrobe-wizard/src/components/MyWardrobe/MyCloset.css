@@ -1,0 +1,63 @@
+.add-item-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+  
+form {
+    display: flex;
+    flex-direction: column;
+}
+  
+label {
+    margin-bottom: 8px;
+}
+  
+input {
+    padding: 8px;
+    margin-bottom: 16px;
+}
+  
+button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  
+button:hover {
+  background-color: #45a049;
+}
+
+.wardrobe-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.added-clothing-container {
+  display: flex; /* This makes the added items appear in a row, not column form*/
+  flex-wrap: wrap;  
+  /* justify-content: space-around; */
+}
+
+.added-item {
+  flex-wrap: wrap;
+  margin: 10px; 
+  min-width: calc(100% / 6); 
+  max-width: 200px;
+  /* box-sizing: border-box; */
+  padding: 10px;
+  border: 2px solid #45a049;;
+  border-radius: 10px;
+  overflow: auto;
+}
+
+.added-item p {
+  max-width: 100%;
+}

@@ -74,19 +74,14 @@
     cursor: pointer;
 }
 
-.submit-container {
+.error-container {
     display: flex;
     /* gap: 15px; */
-    margin: 30px auto;
-    align-items: cetner;
-    /* 
-    need to align items vertical
-    */
+    margin: 0px auto;
 }
 
 .error-message {
     display: flex;
-    align-items: center;
     color: #620000;
     font-size: small;
 }
@@ -110,6 +105,12 @@
     font-size: 19px;
     font-weight: 700;
     cursor: pointer;
+}
+
+.submit-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .submit-btn {

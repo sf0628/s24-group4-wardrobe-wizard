@@ -92,30 +92,19 @@ const LoginSignup = () => {
                     />
                 </div>
 
-                {action === "Sign up" ? <div></div> : <div className="forgot-password">
-                    Forgot Password? <span>Click here.</span>
-                </div>}
-
-                {/* <div className="error-container">
-                {showErrorMessage && (
-                            <div className="error-message">Please fill out all required fields</div>
-                        )}
-                </div> */}
-
-                <div className="submit-container">
-                    <div className="error-container"
+                <div className="error-container"
                     //  onChange={() => {showErrorMessage("")}}
                     >
                         {showErrorMessage && (
                                     <div className="error-message">Please fill out all required fields</div>
                                 )}
-                    </div>
-
-                    <div className="submit-btn" onClick={handleSubmit} 
-                         disabled={!isFormValid()}>
-                            Submit
-                    </div>
                 </div>
+
+                {action === "Sign up" ? <div></div> : <div className="forgot-password">
+                    Forgot Password? <span>Click here.</span>
+                </div>}
+
+                
 
                 <div className="log-or-signin-container">
                     <div className={action === "Login" ? "submit" : "submit gray"} 
@@ -130,6 +119,13 @@ const LoginSignup = () => {
                         setAction("Sign up");
                         setFormSubmitted(false); // Reset the formSubmitted flag when switching actions
                     }}>Sign up
+                    </div>
+                </div>
+
+                <div className="submit-container">
+                        <div className="submit-btn" onClick={handleSubmit} 
+                         disabled={!isFormValid()}>
+                            Submit
                     </div>
                 </div>
             </div>
