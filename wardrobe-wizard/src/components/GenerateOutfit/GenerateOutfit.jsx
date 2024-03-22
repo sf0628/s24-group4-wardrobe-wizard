@@ -1,12 +1,14 @@
 // GenerateOutfitPage.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './generateOutfit.css'
 
 const GenerateOutfit = () => {
   const [weatherData, setWeather] = useState('');
   const [city, setCity] = useState('');
   const [selectedStyle, setSelectedStyle] = useState('');
   const [outfitResult, setOutfitResult] = useState('');
+  const [wardrobeItems, setWardrobeItems] = useState([]);
 
   // Fetch weather information when the component mounts
   const fetchWeather = async () => {
@@ -49,17 +51,19 @@ const GenerateOutfit = () => {
   };
 
   return (
-    <div>
+    <div class="generate-outfit-container">
         <div>
-            <form onSubmit={handleSubmit}>
-                <input
-                type="text"
-                placeholder="Enter city name"
-                value={city}
-                onChange={handleInputChange}
-                />
-                <button type="submit">Get Weather</button>
-            </form>
+            <div class="weather-text-box">
+                <form onSubmit={handleSubmit}>
+                    <input
+                    type="text"
+                    placeholder="Enter city name"
+                    value={city}
+                    onChange={handleInputChange}
+                    />
+                    <button type="submit">Get Weather</button>
+                </form>
+            </div>
             {weatherData ? (
                 <>
                 <h2>{weatherData.name}</h2>
@@ -86,7 +90,7 @@ const GenerateOutfit = () => {
         <option value="formal">Formal</option>
       </select>
 
-      <button onClick={generateOutfit}>Generate Outfit</button>
+      <button onClick={() => generateOutfit({ wardrobeItems })}>Generate Outfit</button>
 
       <div>{outfitResult}</div>
     </div>

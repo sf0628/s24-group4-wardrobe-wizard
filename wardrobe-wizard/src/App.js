@@ -9,6 +9,7 @@ import MyWardrobe from './components/MyWardrobe/MyWardrobe';
 import Home from './components/Home';
 import LoginSignup from './components/LoginSignup/LoginSignup';
 import GenerateOutfit from './components/GenerateOutfit/GenerateOutfit'
+import NavBar from './components/NavBar/NavBar';
 
 // import Navbar from './NavBar';
 
@@ -22,18 +23,18 @@ function App() {
 
 
   return(  <Router>
-           <Routes>
-           <Route path="/" element={<Home />} />
+           <NavBar/> 
+            <Routes>
+              <Route path="/" element={<Home />} />
 
-            <Route path="/myWardrobe" element={<MyWardrobe onAddItem={handleAddItem}/>} />
+              <Route path="/myWardrobe" element={<MyWardrobe onAddItem={handleAddItem}/>} />
 
-            <Route path="/login" element={<LoginSignup/>}/>
+              <Route path="/login" element={<LoginSignup/>}/>
 
-            <Route path="/generateOutfit" element={<GenerateOutfit wardrobeItems={wardrobeItems}/>}/>
-             {/* <Route path="/home" component={Home} /> */}
-            
-             </Routes>
-             {/* <Route path="/navbar" component={NavBar}/> */}
+              <Route path="/generateOutfit" element={<GenerateOutfit wardrobeItems={wardrobeItems}/>}/>
+              {/* <Route path="/home" component={Home} /> */}
+              
+              </Routes>
            </Router>
   )
 }
