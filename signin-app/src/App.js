@@ -7,7 +7,10 @@ import { BrowserRouter as Router,Routes,Route} from 'react-router-dom';
 
 import SignInForm from './components/SignInForm';
 import MyCloset from './components/MyCloset';
- import Home from './components/Home';
+import Home from './components/Home';
+import FormInput from './components/FormInput';
+import LoginSignup from './components/LoginSignup/LoginSignup';
+
 // import Navbar from './NavBar';
 
 function App() {
@@ -20,9 +23,10 @@ function App() {
   return(  <Router>
            <Routes>
            <Route path="/" element={<Home />} />
-             <Route path="/signin" element={<SignInForm />} />
-             <Route path="/mycloset" element={<MyCloset />} />
-           
+            <Route path="/signin" element={<SignInForm />} />
+            <Route path="/mycloset" element={<MyCloset />} />
+            <Route path="/formInput" element={<FormInput />} />
+            <Route path="/login" element={<LoginSignup/>}/>
              {/* <Route path="/home" component={Home} /> */}
             
              </Routes>
