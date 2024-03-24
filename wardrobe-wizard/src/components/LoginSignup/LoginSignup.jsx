@@ -5,6 +5,9 @@ import user_icon from '../Assets/person.png'
 import email_icon from '../Assets/email.png'
 import password_icon from '../Assets/password.png'
 
+// const supabase = createClient('https://<project>.supabase.co', '<your-anon-key>')
+
+
 const LoginSignup = () => {
     // represents if user is in the Sign in or Login page
     const [action, setAction] = useState("Login");
@@ -21,6 +24,8 @@ const LoginSignup = () => {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const navigate = useNavigate();
 
+    const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2a3NpdmtlcGZtcmJnd3ZscW55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEyOTc4NDMsImV4cCI6MjAyNjg3Mzg0M30.MEA_BDrynBMJ9UGjMLIRFqdNraI5TMMxWinumEaGpu4';
+
     const isFormValid = () => {
         if (action === "Login") {
             return formData.email.trim() !== '' && formData.password.trim() !== '';
@@ -29,25 +34,37 @@ const LoginSignup = () => {
         }
     };
 
-    const handleSubmit = () => {
-        if (isFormValid()) {
-           // setShowErrorMessage(false);
-            localStorage.setItem('formData', JSON.stringify(formData));
-            console.log('Form data saved:', formData);
+    const handleChange = (e) => {
+        console.log(e.target)
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+      };
+    
+      const handleSubmit = async (e) => {
+        e.preventDefault();
 
-            // Navigate to /mycloset page
-            if (!formSubmitted) {
-                setFormSubmitted(true);
-                navigate("/mycloset");
-            }
+    try {
+        const response = await fetch('https://ivksivkepfmrbgwvlqny.supabase.co', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Optionally, you can add the API key here as well
+            // 'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({ ...formData, apiKey: apiKey })
+        });
+  
+        if (response.ok) {
+          // Login successful
+          const data = await response.json();
+          // Handle successful login, e.g., store token in local storage, redirect, etc.
         } else {
-            setShowErrorMessage(true);
-            console.log('Please fill out all required fields');
+          // Login failed
+          const errorData = await response.json();
+          console.error('Login failed:', errorData.message); // Adjust error handling as needed
         }
-    };
-
-    const handleChange = () => {
-        setShowErrorMessage(false);
+      } catch (error) {
+        console.error('Error during login:', error); // General error handling
+      }
     };
 
     return (
@@ -64,7 +81,7 @@ const LoginSignup = () => {
                         type="text"
                         value={formData.username}
                         onChange={(e) => { setFormData({ ...formData, username: e.target.value });
-                        handleChange();}}
+                   ;}}
                     />
                 </div>}
 
@@ -76,7 +93,7 @@ const LoginSignup = () => {
                         value={formData.email}
                         onChange={(e) => {
                             setFormData({ ...formData, email: e.target.value });
-                            handleChange();
+                
                         }}
                     />
                 </div>
@@ -88,7 +105,7 @@ const LoginSignup = () => {
                         placeholder="Password"
                         value={formData.password}
                         onChange={(e) => { setFormData({ ...formData, password: e.target.value });
-                        handleChange();}}
+                       }}
                     />
                 </div>
 
