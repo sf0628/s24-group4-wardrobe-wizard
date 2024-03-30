@@ -1,4 +1,8 @@
 .generate-outfit-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Horizontally center items */
+    align-items: center; /* Vertically center items */
     padding: 30px;
     margin: 30px;
 }
