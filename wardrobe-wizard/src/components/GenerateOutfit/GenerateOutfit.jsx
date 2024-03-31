@@ -96,7 +96,7 @@ const GenerateOutfit = () => {
                 <p>Feels like : {weatherData.main.feels_like} {isCelsius ? '°C' : '°F'}</p>
                 <p>Humidity : {weatherData.main.humidity}%</p>
                 <p>Pressure : {weatherData.main.pressure}</p>
-                <p>Wind Speed : {weatherData.wind.speed}{isCelsius ? 'm/s' : 'mph'}</p>
+                <p>Wind Speed : {weatherData.wind.speed}{isCelsius ? ' m/s' : ' mph'}</p>
                 </>
             ) : (
                 <p>Loading weather data...</p>
@@ -115,7 +115,7 @@ const GenerateOutfit = () => {
       <button onClick={generateOutfit}>Generate Outfit</button>
 
       <button onClick={toggleTemperatureUnit}>
-        Change Units ({isCelsius ? 'Metric' : 'Imperial'})
+        Change Units (to {isCelsius ? 'Imperial' : 'Metric'})
       </button>
 
       <div>{outfitResult}</div>
