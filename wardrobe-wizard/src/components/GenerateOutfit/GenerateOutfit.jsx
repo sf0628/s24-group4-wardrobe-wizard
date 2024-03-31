@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './generateOutfit.css'
 
-//test change
 const GenerateOutfit = () => {
   const [weatherData, setWeather] = useState('');
   const [city, setCity] = useState('');
