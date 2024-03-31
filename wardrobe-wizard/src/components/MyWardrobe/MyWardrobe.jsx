@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import './MyCloset.css';
-
+export const supabase = createClient('https://ivksivkepfmrbgwvlqny.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2a3NpdmtlcGZtcmJnd3ZscW55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEyOTc4NDMsImV4cCI6MjAyNjg3Mzg0M30.MEA_BDrynBMJ9UGjMLIRFqdNraI5TMMxWinumEaGpu4');
 //component 'MyCloset' that accepts a prop 'onAddItem'
-const MyCloset = ({ onAddItem }) => {
+//const MyCloset = ({ onAddItem }) => {
+  const MyCloset = ({ user }) => {
   // State hooks for managing form inputs and input data
 
   // name of clothing item, initial state as an empty string
@@ -21,6 +23,35 @@ const MyCloset = ({ onAddItem }) => {
   const [presetTypes, setPresetTypes] = useState(['T-Shirt', 'Sweater', 'Long Sleeve', 'Jeans', 'Pants']);
   // represents the state of the 'add a custom item type' text box
   const [showTextBox, setShowTextBox] = useState(false);
+
+  
+
+
+  useEffect(() => {
+    fetchClothingItems();
+  }, [user]); // Fetch items when the user changes
+
+  const fetchClothingItems = async () => {
+    try {
+      // Fetch clothing items associated with the current user
+      const { data, error } = await supabase
+        .from('clothing_items')
+        .select('*')
+        .eq('user_id', user.id); // Assuming 'user_id' is the column name for user IDs
+
+      if (error) {
+        throw error;
+      }
+
+      setAddedItems(data || []);
+    } catch (error) {
+      console.error('Error fetching clothing items:', error.message);
+    }
+  };
+
+
+
+
 
   // this function validates form input, creating a new clothing item, 
   // updating the state of all the components of an added item, 
@@ -54,7 +85,7 @@ const MyCloset = ({ onAddItem }) => {
     // Pass the new item to the parent component using the onAddItem prop, 
     // It can be good to notify the patent component of updates in a state for many reasons:
     // State managment, data flow, reusability, debugging, etc.
-    onAddItem(newItem);
+    //onAddItem(newItem);
 
     // Clear input fields after adding the item to prepare to add another clothing item.
     setItemName('');

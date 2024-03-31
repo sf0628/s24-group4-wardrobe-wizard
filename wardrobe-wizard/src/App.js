@@ -27,7 +27,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
 
-              <Route path="/myWardrobe" element={<MyWardrobe onAddItem={handleAddItem}/>} />
+              <Route path="/myWardrobe" element={<MyWardrobe user={user}/>} />
+              {/* onAddItem={handleAddItem */}
 
               <Route path="/login" element={<LoginSignup/>}/>
 
