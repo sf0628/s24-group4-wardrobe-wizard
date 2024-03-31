@@ -10,7 +10,7 @@ const GenerateOutfit = () => {
   const [selectedStyle, setSelectedStyle] = useState('');
   const [outfitResult, setOutfitResult] = useState('');
   const [wardrobeItems, setWardrobeItems] = useState([]);
-  const [isCelsius, setIsCelsius] = useState(true); // State for temperature unit toggle
+  const [isCelsius, setIsCelsius] = useState(true); 
 
   // Fetch weather information when the component mounts
   const fetchWeather = async () => {
@@ -26,7 +26,7 @@ const GenerateOutfit = () => {
 
   useEffect(() => {
     fetchWeather();
-  }, [isCelsius]); // Fetch weather data when temperature unit changes
+  }, [isCelsius]); 
 
   const handleInputChange = (e) => {
     setCity(e.target.value);
@@ -37,14 +37,13 @@ const GenerateOutfit = () => {
       alert('Please fill in all fields.');
       return;
     }
-    
+
     e.preventDefault();
     fetchWeather();
   };
 
   const generateOutfit = () => {
     // Define temperature thresholds
-    // isCelsius ? HOT_THRESHOLD_C : HOT_THRESHOLD_F
     const mod_min = isCelsius ? 4 : 40;
     const mod_max = isCelsius ? 21 : 70;
 
@@ -54,8 +53,8 @@ const GenerateOutfit = () => {
       const temperature = weatherData.main.temp;
 
       // Determine weather suitability based on temperature and weather tags
-      if (temperature >= mod_max && weather.includes('hot')) {
-        return true; // Hot weather
+      if (temperature >= mod_max && weather.includes('warm')) {
+        return true; // warm weather
       } else if (temperature >= mod_min && temperature <= mod_max && weather.includes('moderate')) {
         return true; // Moderate weather
       } else if (temperature < mod_min && weather.includes('cold')) {
@@ -65,11 +64,9 @@ const GenerateOutfit = () => {
       }
     });
 
-    // If no suitable items found, return a message
     if (filteredItems.length === 0) {
       setOutfitResult(`No suitable items found for the current weather.`);
     } else {
-      // Randomly select an item from the filteredItems
       const randomItem = filteredItems[Math.floor(Math.random() * filteredItems.length)];
       setOutfitResult(`Generated Outfit: ${randomItem.name}`);
     }
