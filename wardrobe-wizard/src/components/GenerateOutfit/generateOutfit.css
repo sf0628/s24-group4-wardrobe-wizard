@@ -1,3 +1,7 @@
+h1 {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
 .generate-outfit-container{
     display: flex;
     flex-direction: column;
@@ -8,4 +12,8 @@
 }
 .weather-text-box {
     max-width: 400px;
+}
+
+select#style-selector {
+    margin: 5px;
 }

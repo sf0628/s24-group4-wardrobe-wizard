@@ -1,0 +1,22 @@
+/* Home.css */
+
+h2 {
+    text-align: center;
+}
+.slick-slider {
+    width: 95%;
+    height: 70%;
+    margin: 0 auto;
+  }
+  
+  .slick-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .slick-slide img {
+    max-width: 50%;
+    max-height: 50%;
+  }
+  
