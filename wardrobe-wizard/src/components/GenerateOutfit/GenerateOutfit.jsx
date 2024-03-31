@@ -29,14 +29,15 @@ const GenerateOutfit = () => {
   }, [isCelsius]); // Fetch weather data when temperature unit changes
 
   const handleInputChange = (e) => {
-    if (!city) {
-      alert('Please fill in all fields.');
-      return;
-    }
     setCity(e.target.value);
   };
 
   const handleSubmit = (e) => {
+    if (!city) {
+      alert('Please fill in all fields.');
+      return;
+    }
+    
     e.preventDefault();
     fetchWeather();
   };
