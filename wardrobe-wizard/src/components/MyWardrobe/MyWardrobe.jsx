@@ -29,8 +29,11 @@ export const supabase = createClient(supabaseUrl, supabaseLink);
 // how to import: 
 // import supabase from '../MyWardrobe/MyWardrobe'
 
+
 //component 'MyCloset' that accepts a prop 'onAddItem'
   const MyCloset = ({ user }) => {
+
+
   // State hooks for managing form inputs and input data
 
   // name of clothing item, initial state as an empty string
@@ -49,6 +52,8 @@ export const supabase = createClient(supabaseUrl, supabaseLink);
   const [presetTypes, setPresetTypes] = useState(['T-Shirt', 'Sweater', 'Long Sleeve', 'Jeans', 'Pants']);
   // represents the state of the 'add a custom item type' text box
   const [showTextBox, setShowTextBox] = useState(false);
+  // represents the state of the weather (cold, moderate, warm)
+  const [weather, setWeather] = useState('');
 
   
 
@@ -67,8 +72,8 @@ export const supabase = createClient(supabaseUrl, supabaseLink);
   // and notifying the parent comonent (App.js) about the newly added item.
   const handleAddItem = async () => {
     // Validate input - make sure no required fields are empty.
-    if (!itemName || !itemType || !tags) {
-      alert('Please fill in the item name, type, and at least one tag.');
+    if (!itemName || !itemType || !tags || !weather) {
+      alert('Please fill in all fields.');
       return;
     }
 
@@ -76,16 +81,17 @@ export const supabase = createClient(supabaseUrl, supabaseLink);
     const isPresetType = presetTypes.includes(itemType);
 
     // Add the custom type to the list ('customTypes' state) if it's not a preset or custom type already.
-      if (!isPresetType && showTextBox) {
-        setPresetTypes((prevTypes) => [...prevTypes, itemType]);
+    if (!isPresetType && showTextBox) {
+      setPresetTypes((prevTypes) => [...prevTypes, itemType]);
     }
 
-    // Create an object representing the new item based on the uesr input.
+    // Create an object representing the new item based on the user input.
     const newItem = {
       name: itemName,
       type: itemType,
       image: selectedImage,
       tags: [...tags],
+      weather: weather,
     };
 
     try {
@@ -105,17 +111,18 @@ export const supabase = createClient(supabaseUrl, supabaseLink);
     // Adds a newItem to the addedItems state using the setAddedItems function.
     setAddedItems((prevItems) => [...prevItems, newItem]);
 
-    // Pass the new item to the parent component using the onAddItem prop, 
-    // It can be good to notify the patent component of updates in a state for many reasons:
-    // State managment, data flow, reusability, debugging, etc.
-    //onAddItem(newItem);
+
+    // Pass the new item to the parent component using the onAddItem prop.
+    onAddItem(newItem);
+
 
     // Clear input fields after adding the item to prepare to add another clothing item.
     setItemName('');
     setItemType('');
     setSelectedImage(null);
     setTags([]);
-    setShowTextBox(false);  
+    setShowTextBox(false);
+    setWeather('');
   };
 
   // Arrow function that takes in 'tag', representing the tag being clicked or changed.
@@ -131,14 +138,14 @@ export const supabase = createClient(supabaseUrl, supabaseLink);
     }
   };
 
-  // Arrow function that takes in 'e', representing the event object, containing information about the event that occured.
+  // Arrow function that takes in 'e', representing the event object, containing information about the event that occurred.
   const handleImageChange = (e) => {
     // Extracts the file from the input event (e).
     // Takes the first file from the array (I assume there is only one file added).
     const file = e.target.files[0];
     // Checks if the file was successfully selected.
     if (file) {
-      // Creates a new FileReader object, which allows asychronous readings of the contents of the file.
+      // Creates a new FileReader object, which allows asynchronous readings of the contents of the file.
       const reader = new FileReader();
       // Sets up an event handler that is triggered when the file reading operation is done.
       reader.onloadend = () => {
@@ -224,23 +231,33 @@ export const supabase = createClient(supabaseUrl, supabaseLink);
           <div>
           <input
             type="checkbox"
-            id="cuteTag"
+            id="comfyTag"
             checked={tags.includes('comfy')}
             onChange={() => handleTagChange('comfy')}
           />
-          <label htmlFor="cuteTag">Comfy</label>
+          <label htmlFor="comfyTag">Comfy</label>
           </div>
 
           <div>
           <input
             type="checkbox"
-            id="cuteTag"
+            id="formalTag"
             checked={tags.includes('formal')}
             onChange={() => handleTagChange('formal')}
           />
-          <label htmlFor="cuteTag">Formal</label>
+          <label htmlFor="formalTag">Formal</label>
           </div>
 
+          <label>Weather:</label>
+          <select
+            value={weather}
+            onChange={(e) => setWeather(e.target.value)}
+          >
+            <option value="">Select Weather</option>
+            <option value="cold">Cold</option>
+            <option value="moderate">Moderate</option>
+            <option value="warm">Warm</option>
+          </select>
 
           <label>Upload Photo:</label>
           <input type="file" accept="image/*" onChange={handleImageChange} />
