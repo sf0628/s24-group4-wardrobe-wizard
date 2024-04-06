@@ -1,37 +1,35 @@
-import React from 'react';
-import Slider from 'react-slick';
-import './Home.css'
-
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import image1 from './Assets/drink.jpeg';
-import image2 from './Assets/white flower.JPG';
-import image3 from './Assets/table.png';
+import React, { useState } from 'react';
+import './Home.css';
+import image1 from './Assets/homepage.svg';
+import image2 from './Assets/about.svg';
+import image3 from './Assets/our team.svg';
 
 const Home = () => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const images = [image1, image2, image3];
+
+  const nextSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide === images.length - 1 ? 0 : prevSlide + 1));
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide === 0 ? images.length - 1 : prevSlide - 1));
   };
 
   return (
-    <div>
-      <h2>Welcome to the Home Page!</h2>
-      <Slider {...settings}>
-        <div>
-          <img src={image1} alt="Image 1" />
+    <div className="slider-container">
+      <div className="slider">
+        <div className="slide-container" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+          {images.map((image, index) => (
+            <div key={index} className="slide">
+              <img src={image} alt={`Slide ${index}`} />
+            </div>
+          ))}
         </div>
-        <div>
-          <img src={image2} alt="Image 2" />
-        </div>
-        <div>
-          <img src={image3} alt="Image 3" />
-        </div>
-      </Slider>
-      {/* Add content for your home page */}
+        <button className="prev" onClick={prevSlide}>&#10094;</button>
+        <button className="next" onClick={nextSlide}>&#10095;</button>
+      </div>
+      <button className="join-button" onClick={() => { window.location.href = '/login'; }}>Join Us</button>
     </div>
   );
 };
