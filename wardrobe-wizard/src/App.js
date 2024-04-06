@@ -11,8 +11,6 @@ import LoginSignup from './components/LoginSignup/LoginSignup';
 import GenerateOutfit from './components/GenerateOutfit/GenerateOutfit'
 import NavBar from './components/NavBar/NavBar';
 
-// import Navbar from './NavBar';
-
 function App() {
   const [wardrobeItems, setwardrobeItems] = useState([]);
 
@@ -21,13 +19,15 @@ function App() {
     console.log('New Item:', newItem);
   };
 
+  const [user, setUser] = useState(null);
 
-  return(  <Router>
+  return(   <Router>
            <NavBar/> 
             <Routes>
               <Route path="/" element={<Home />} />
 
-              <Route path="/myWardrobe" element={<MyWardrobe onAddItem={handleAddItem}/>} />
+              <Route path="/myWardrobe" element={<MyWardrobe user={user}/>} />
+              {/* onAddItem={handleAddItem */}
 
               <Route path="/login" element={<LoginSignup/>}/>
 
