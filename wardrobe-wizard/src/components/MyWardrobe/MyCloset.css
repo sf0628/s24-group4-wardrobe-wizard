@@ -1,4 +1,5 @@
 .add-item-container {
+
   /* top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -16,6 +17,8 @@
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background: #ebcfff;
+
+
 }
 
 form {
@@ -26,10 +29,12 @@ form {
 label {
   margin-bottom: 8px;
   margin-top: 8px;
+
 }
 
 input {
   padding: 8px;
+    padding: 8px;
 }
 
 button {
@@ -40,6 +45,7 @@ button {
   border-radius: 5px;
   cursor: pointer;
   margin-top: 15px;
+    
 }
 
 button:hover {
@@ -51,6 +57,7 @@ display: flex;
 flex-direction: column;
 align-items: center;
 
+
 }
 
 .added-clothing-container {
@@ -58,8 +65,7 @@ display: flex; /* This makes the added items appear in a row, not column form*/
 flex-wrap: wrap;  
 justify-content: center; /* Vertically center items */
 align-items: center;
-/* justify-content: space-around; */
-}
+
 
 .added-item {
 flex-wrap: wrap;

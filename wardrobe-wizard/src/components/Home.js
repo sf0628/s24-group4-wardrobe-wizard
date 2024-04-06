@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import './Home.css';
 import image1 from './Assets/homepage.svg';
 import image2 from './Assets/about.svg';
-import image3 from './Assets/our team.svg';
+
+import image3 from './Assets/our team mentor.svg';
+
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
