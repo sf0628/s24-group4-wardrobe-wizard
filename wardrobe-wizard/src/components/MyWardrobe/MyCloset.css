@@ -28,7 +28,7 @@ input {
 }
 
 button {
-  background-color: #4caf50;
+  background-color: #b558cf;
   color: white;
   padding: 10px;
   border: none;
@@ -39,7 +39,7 @@ button {
 }
 
 button:hover {
-background-color: #45a049;
+background-color: #9c3cb7;
 }
 
 .wardrobe-container {
