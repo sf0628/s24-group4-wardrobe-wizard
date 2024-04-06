@@ -8,7 +8,7 @@ export const supabase = createClient(supabaseUrl, supabaseLink);
 
   export const fetchClothingItems = async (supabase, user, setAddedItems) =>{
     try {
-      const user = supabase.auth.user();
+      const user = supabase.auth.user;
       if (user) {
         // Fetch clothing items associated with the current user
         const { data, error } = await supabase
@@ -30,7 +30,6 @@ export const supabase = createClient(supabaseUrl, supabaseLink);
 // import supabase from '../MyWardrobe/MyWardrobe'
 
 //component 'MyCloset' that accepts a prop 'onAddItem'
-//const MyCloset = ({ onAddItem }) => {
   const MyCloset = ({ user }) => {
   // State hooks for managing form inputs and input data
 
