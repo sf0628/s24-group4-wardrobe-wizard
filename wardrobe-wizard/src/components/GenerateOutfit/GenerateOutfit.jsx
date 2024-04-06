@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './generateOutfit.css'
+import { supabase } from '../MyWardrobe/MyWardrobe'
 
 const GenerateOutfit = () => {
   const [weatherData, setWeather] = useState('');
@@ -10,7 +11,9 @@ const GenerateOutfit = () => {
   const [selectedStyle, setSelectedStyle] = useState('');
   const [outfitResult, setOutfitResult] = useState('');
   const [wardrobeItems, setWardrobeItems] = useState([]);
+  const [loggedInUserId, setLoggedInUserId] = useState(null); //stores logged-in userID
   const [isCelsius, setIsCelsius] = useState(true); 
+
 
   // Fetch weather information when the component mounts
   const fetchWeather = async () => {
@@ -26,7 +29,13 @@ const GenerateOutfit = () => {
 
   useEffect(() => {
     fetchWeather();
+
+    const savedOutfitResult = localStorage.getItem('outfitResult');
+    if (savedOutfitResult) {
+      setOutfitResult(savedOutfitResult);
+    }
   }, [isCelsius]); 
+
 
   const handleInputChange = (e) => {
     setCity(e.target.value);
@@ -42,7 +51,30 @@ const GenerateOutfit = () => {
     fetchWeather();
   };
 
+
+  //fetch the user ID from supabase authentication session
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const user = supabase.auth.user;
+      if (user) {
+        setLoggedInUserId(user.id);
+      }
+    };
+    fetchUserId();
+  }, []);
+
   const generateOutfit = () => {
+    // Filter the wardrobeItems based on the selected style and userID
+    const filteredItems = wardrobeItems.filter(item => { 
+      return item.tags.includes(selectedStyle) && item.userId === loggedInUserId;
+    });
+    
+    // If there are no items matching the selected style, return a message
+    if (filteredItems.length === 0) {
+      const message = `No items found from ${selectedStyle} style.`;
+      setOutfitResult(message);
+      localStorage.setItem('outfitResult', message); //store in local storage
+      
     // Define temperature thresholds
     const mod_min = isCelsius ? 4 : 40;
     const mod_max = isCelsius ? 21 : 70;
@@ -64,11 +96,14 @@ const GenerateOutfit = () => {
       }
     });
 
-    if (filteredItems.length === 0) {
-      setOutfitResult(`No suitable items found for the current weather.`);
     } else {
       const randomItem = filteredItems[Math.floor(Math.random() * filteredItems.length)];
+      const message = setOutfitResult(`Generated Outfit for ${selectedStyle} style: ${randomItem.name}`);
+      setOutfitResult(message);
+      localStorage.setItem('outfitResult', message); //store in local storage
+
       setOutfitResult(`Generated Outfit: ${randomItem.name}`);
+
     }
   };
 

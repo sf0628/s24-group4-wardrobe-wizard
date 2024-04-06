@@ -1,8 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import './MyCloset.css';
+const supabaseUrl = 'https://ivksivkepfmrbgwvlqny.supabase.co'
+const supabaseLink = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2a3NpdmtlcGZtcmJnd3ZscW55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEyOTc4NDMsImV4cCI6MjAyNjg3Mzg0M30.MEA_BDrynBMJ9UGjMLIRFqdNraI5TMMxWinumEaGpu4'
 
-// Component 'MyCloset' that accepts a prop 'onAddItem'
-const MyCloset = ({ onAddItem }) => {
+export const supabase = createClient(supabaseUrl, supabaseLink);
+
+  export const fetchClothingItems = async (supabase, user, setAddedItems) =>{
+    try {
+      const user = supabase.auth.user;
+      if (user) {
+        // Fetch clothing items associated with the current user
+        const { data, error } = await supabase
+          .from('clothing_items')
+          .select('*')
+          .eq('user_id', user.id); // Assuming 'user_id' is the column name for user IDs
+
+        if (error) {
+          throw error;
+        }
+        setAddedItems(data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching clothing items:', error.message);
+    }
+  }
+
+// how to import: 
+// import supabase from '../MyWardrobe/MyWardrobe'
+
+
+//component 'MyCloset' that accepts a prop 'onAddItem'
+  const MyCloset = ({ user }) => {
+
+
   // State hooks for managing form inputs and input data
 
   // name of clothing item, initial state as an empty string
@@ -24,10 +55,22 @@ const MyCloset = ({ onAddItem }) => {
   // represents the state of the weather (cold, moderate, warm)
   const [weather, setWeather] = useState('');
 
+  
+
+
+  useEffect(() => {
+    // Call fetchClothingItems inside useEffect
+    fetchClothingItems(supabase, user, setAddedItems);
+  }, [user]); 
+
+
+
+
+
   // this function validates form input, creating a new clothing item, 
   // updating the state of all the components of an added item, 
   // and notifying the parent comonent (App.js) about the newly added item.
-  const handleAddItem = () => {
+  const handleAddItem = async () => {
     // Validate input - make sure no required fields are empty.
     if (!itemName || !itemType || !tags || !weather) {
       alert('Please fill in all fields.');
@@ -51,11 +94,27 @@ const MyCloset = ({ onAddItem }) => {
       weather: weather,
     };
 
+    try {
+      // Insert the new item into the database using Supabase's insert() method
+      const { data, error } = await supabase.from('clothing_items').insert([newItem]);
+  
+      if (error) {
+        throw error;
+      }
+  
+      console.log('Item inserted successfully:', data);
+    } catch (error) {
+      console.error('Error inserting item:', error.message);
+      return; // Return early if there's an error inserting the item
+    }
+  
     // Adds a newItem to the addedItems state using the setAddedItems function.
     setAddedItems((prevItems) => [...prevItems, newItem]);
 
+
     // Pass the new item to the parent component using the onAddItem prop.
     onAddItem(newItem);
+
 
     // Clear input fields after adding the item to prepare to add another clothing item.
     setItemName('');
