@@ -1,4 +1,5 @@
-// GenerateOutfitPage.js
+// GenerateOutfit.jsx
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './generateOutfit.css'
@@ -9,15 +10,15 @@ const GenerateOutfit = () => {
   const [selectedStyle, setSelectedStyle] = useState('');
   const [outfitResult, setOutfitResult] = useState('');
   const [wardrobeItems, setWardrobeItems] = useState([]);
+  const [isCelsius, setIsCelsius] = useState(true); 
 
   // Fetch weather information when the component mounts
   const fetchWeather = async () => {
     try {
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=5a47cffe740776292c22b68ca2c992cb`
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${isCelsius ? 'metric' : 'imperial'}&appid=5a47cffe740776292c22b68ca2c992cb`
       );
       setWeather(response.data);
-      console.log(response.data); //You can see all the weather data in console log
     } catch (error) {
       console.error(error);
     }
@@ -25,35 +26,60 @@ const GenerateOutfit = () => {
 
   useEffect(() => {
     fetchWeather();
-  }, []);
+  }, [isCelsius]); 
 
   const handleInputChange = (e) => {
     setCity(e.target.value);
   };
 
   const handleSubmit = (e) => {
+    if (!city) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
     e.preventDefault();
     fetchWeather();
   };
 
-  const generateOutfit = ({ wardrobeItems }) => {
-    // Filter the wardrobeItems based on the selected style
-    const filteredItems = wardrobeItems.filter(item => item.tags.includes(selectedStyle));
-    
-    // If there are no items matching the selected style, return a message
+  const generateOutfit = () => {
+    // Define temperature thresholds
+    const mod_min = isCelsius ? 4 : 40;
+    const mod_max = isCelsius ? 21 : 70;
+
+    // Filter wardrobeItems based on weather conditions
+    const filteredItems = wardrobeItems.filter(item => {
+      const weather = item.weather.toLowerCase();
+      const temperature = weatherData.main.temp;
+
+      // Determine weather suitability based on temperature and weather tags
+      if (temperature >= mod_max && weather.includes('warm')) {
+        return true; // warm weather
+      } else if (temperature >= mod_min && temperature <= mod_max && weather.includes('moderate')) {
+        return true; // Moderate weather
+      } else if (temperature < mod_min && weather.includes('cold')) {
+        return true; // Cold weather
+      } else {
+        return false; // Not suitable for current weather
+      }
+    });
+
     if (filteredItems.length === 0) {
-      setOutfitResult(`No items found for ${selectedStyle} style.`);
+      setOutfitResult(`No suitable items found for the current weather.`);
     } else {
-      // Randomly select an item from the filteredItems
       const randomItem = filteredItems[Math.floor(Math.random() * filteredItems.length)];
-      setOutfitResult(`Generated Outfit for ${selectedStyle} style: ${randomItem.name}`);
+      setOutfitResult(`Generated Outfit: ${randomItem.name}`);
     }
   };
 
+  const toggleTemperatureUnit = () => {
+    setIsCelsius(prevState => !prevState); // Toggle temperature unit between Celsius and Fahrenheit
+  };
+
   return (
-    <div class="generate-outfit-container">
+    <div className="generate-outfit-container">
         <div>
-            <div class="weather-text-box">
+            <div className="weather-text-box">
                 <form onSubmit={handleSubmit}>
                     <input
                     type="text"
@@ -67,12 +93,12 @@ const GenerateOutfit = () => {
             {weatherData ? (
                 <>
                 <h2>{weatherData.name}</h2>
-                <p>Temperature: {weatherData.main.temp}°C</p>
+                <p>Temperature: {weatherData.main.temp} {isCelsius ? '°C' : '°F'}</p>
                 <p>Description: {weatherData.weather[0].description}</p>
-                <p>Feels like : {weatherData.main.feels_like}°C</p>
+                <p>Feels like : {weatherData.main.feels_like} {isCelsius ? '°C' : '°F'}</p>
                 <p>Humidity : {weatherData.main.humidity}%</p>
                 <p>Pressure : {weatherData.main.pressure}</p>
-                <p>Wind Speed : {weatherData.wind.speed}m/s</p>
+                <p>Wind Speed : {weatherData.wind.speed}{isCelsius ? ' m/s' : ' mph'}</p>
                 </>
             ) : (
                 <p>Loading weather data...</p>
@@ -81,8 +107,6 @@ const GenerateOutfit = () => {
 
       <h1>Generate Outfit</h1>
 
-      {/* <p>Today in '{LOCATION}': {weather}</p> */}
-
       <label htmlFor="style-selector">Select Style:</label>
       <select id="style-selector" onChange={(e) => setSelectedStyle(e.target.value)}>
         <option value="comfy">Comfy</option>
@@ -90,7 +114,11 @@ const GenerateOutfit = () => {
         <option value="formal">Formal</option>
       </select>
 
-      <button onClick={() => generateOutfit({ wardrobeItems })}>Generate Outfit</button>
+      <button onClick={generateOutfit}>Generate Outfit</button>
+
+      <button onClick={toggleTemperatureUnit}>
+        Change Units (to {isCelsius ? 'Imperial' : 'Metric'})
+      </button>
 
       <div>{outfitResult}</div>
     </div>
